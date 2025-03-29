@@ -1,0 +1,14 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    padding: 20px;
+    color: #585858;
+}
+
+.nav img {
+    width: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
