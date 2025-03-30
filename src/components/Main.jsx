@@ -8,7 +8,7 @@ import { ContextState } from '../context/Context';
 
 const Main = () => {
     const {
-        input, setInput, recentPrmopt, setRecentPrompt, prevPrmopt, setPrevPrompt, showResult, setShowResult, loading, setLoading, resultData, setResultData, onSent } = ContextState();
+        input, setInput, recentPrmopt, showResult, loading, resultData, onSent } = ContextState();
     return (
         <div className='main'>
             <Nav />
@@ -68,7 +68,7 @@ const Main = () => {
                         <div>
                             <img src={assets.gallery_icon} alt="gallery_icon" />
                             <img src={assets.mic_icon} alt="mic_icon" />
-                            <img onClick={() => onSent()} src={assets.send_icon} alt="send_icon" />
+                            {input && <img onClick={() => onSent()} src={assets.send_icon} alt="send_icon" />}
                         </div>
                     </div>
                     <div className="bottom-info">
