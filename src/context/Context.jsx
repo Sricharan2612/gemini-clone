@@ -5,7 +5,7 @@ const Context = createContext();
 const ContextProvider = ({ children }) => {
     const [input, setInput] = useState('');
     const [recentPrmopt, setRecentPrompt] = useState('');
-    const [prevPrmopt, setPrevPrompt] = useState([]);
+    const [prevPrompt, setPrevPrompt] = useState([]);
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const [resultData, setResultData] = useState('');
@@ -16,17 +16,36 @@ const ContextProvider = ({ children }) => {
         }, 75 * index);
     };
 
-    const onSent = async () => {
+    const newChat = () => {
+        setLoading(false);
+        setShowResult(false);
+    };
+
+    const onSent = async (promptData) => {
         setResultData('');
         setLoading(true);
         setShowResult(true);
-        setRecentPrompt(input);
-        setPrevPrompt([...prevPrmopt, input]);
 
-        const responseData = await main(input);
+
+        let responseData;
+        if (promptData !== undefined) {
+            responseData = await main(promptData);
+            setRecentPrompt(promptData);
+        } else {
+            setPrevPrompt(prev => [...prev, input]);
+            setRecentPrompt(input);
+            responseData = await main(input);
+        }
+
+        // setRecentPrompt(input);
+        // setPrevPrompt(prev => [...prev, input]);
+
+        // const { text: responseData } = await main(input);
+
+
         //formating the text
         let resArray = responseData.split('**');
-        let newResponse;
+        let newResponse = '';
         for (let i = 0; i < resArray.length; i++) {
             if (i === 0 || i % 2 !== 1) {
                 newResponse += resArray[i];
@@ -50,7 +69,7 @@ const ContextProvider = ({ children }) => {
         setInput,
         recentPrmopt,
         setRecentPrompt,
-        prevPrmopt,
+        prevPrompt,
         setPrevPrompt,
         showResult,
         setShowResult,
@@ -58,7 +77,8 @@ const ContextProvider = ({ children }) => {
         setLoading,
         resultData,
         setResultData,
-        onSent
+        onSent,
+        newChat
     };
     return (
         <Context.Provider value={contextValue}>
